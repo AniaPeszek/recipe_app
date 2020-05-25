@@ -120,12 +120,26 @@
                         </div>
                     </div>
 
+
+                    <!-- Buttons -->
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <button class="btn btn-secondary" style="margin-right: 5px">Oceń przepis</button>
-                            <button class="btn btn-primary ">Dodaj do ulubionych</button>
+
+                            <button class="btn btn-primary" {% if is_favourite %}style="display:none;"{% endif %}
+                                    id="add-to-favourites" value="{{ recipe.id }}">Dodaj do
+                                ulubionych
+                            </button>
+
+                            <button class="btn btn-primary" {% if not is_favourite %}style="display:none;"{% endif %}
+                                    id="remove-from-favourites" value="{{ recipe.id }}">Usuń z ulubionych
+                            </button>
+
+                            {% csrf_token %}
                         </div>
                     </div>
+
+
                     <!-- Ingredients-->
                     <div class="row mb-5">
                         <div class="col-md-12">
@@ -147,4 +161,69 @@
         </div>
     </section>
 
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        $(document).ready(function () {
+            $("#add-to-favourites").click(function () {
+                {% if user.is_authenticated %}
+                var recipe_id = $(this).val();
+                console.log(recipe_id)
+                var csrf_token =$('input[name="csrfmiddlewaretoken"]').val();
+                var addToFavourites = $.ajax({
+                    "url": "{% url 'add_to_favourites' %}",
+                    "type": "POST",
+                    'data': {
+                        'recipe_id': recipe_id,
+                        'csrfmiddlewaretoken': csrf_token
+                    },
+                    'dataType': 'json',
+                    success: function (response) {
+                        console.log(response);
+                        $("#add-to-favourites").hide();
+                        $("#remove-from-favourites").show();
+                    },
+                    error: function (response) {
+                        console.log(response["responseJSON"]["error"]);
+                    }
+                });
+
+                {% else %}
+                alert('Żeby dodać przepis do ulubionych musisz być zalogowany');
+                {% endif %}
+            })
+        });
+
+    $(document).ready(function () {
+            $("#remove-from-favourites").click(function () {
+                {% if user.is_authenticated %}
+                var recipe_id = $(this).val();
+                console.log(recipe_id)
+                var csrf_token =$('input[name="csrfmiddlewaretoken"]').val();
+                var removeFavourites = $.ajax({
+                    "url": "{% url 'remove_from_favourites' %}",
+                    "type": "POST",
+                    'data': {
+                        'recipe_id': recipe_id,
+                        'csrfmiddlewaretoken': csrf_token
+                    },
+                    'dataType': 'json',
+                    success: function (response) {
+                        console.log(response);
+                        $("#remove-from-favourites").hide();
+                        $("#add-to-favourites").show();
+                    },
+                    error: function (response) {
+                        console.log(response["responseJSON"]["error"]);
+                    }
+                });
+
+                {% else %}
+                alert('Żeby usunąć przepis z ulubionych musisz być zalogowany');
+                {% endif %}
+            })
+        })
+    </script>
 {% endblock %}
