@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block title %} | {{ recipe.title }}{% endblock %}
+
+{% block content %}
+    <section id="showcase-inner" class="py-5 text-white">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <h1 class="display-4">{{ recipe.title }}</h1>
+                    <p class="lead">
+                        <i class="fas fa-utensils text-secondary"></i>
+                        Kategoria: {{ recipe.get_category_display }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Recipe -->
+    <section id="recipe" class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Main Image -->
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2">
+                            <img src="{{ recipe.photo_main.url }}" alt="główne zdjęcie" class="img-main img-fluid mb-3">
+                            <!-- Thumbnails -->
+                            <div class="row mb-5 thumbs">
+                                {% if recipe.photo_main %}
+                                    <div class="col-md-2">
+                                        <a href="{{ recipe.photo_main.url }}" data-lightbox="meal-images">
+                                            <img src="{{ recipe.photo_main.url }}" alt="" class="img-fluid">
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if recipe.photo_1 %}
+                                    <div class="col-md-2">
+                                        <a href="{{ recipe.photo_1.url }}" data-lightbox="meal-images">
+                                            <img src="{{ recipe.photo_1.url }}" alt="" class="img-fluid">
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if recipe.photo_2 %}
+                                    <div class="col-md-2">
+                                        <a href="{{ recipe.photo_2.url }}" data-lightbox="meal-images">
+                                            <img src="{{ recipe.photo_2.url }}" alt="" class="img-fluid">
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if recipe.photo_3 %}
+                                    <div class="col-md-2">
+                                        <a href="{{ recipe.photo_3.url }}" data-lightbox="meal-images">
+                                            <img src="{{ recipe.photo_3.url }}" alt="" class="img-fluid">
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if recipe.photo_4 %}
+                                    <div class="col-md-2">
+                                        <a href="{{ recipe.photo_4.url }}" data-lightbox="meal-images">
+                                            <img src="{{ recipe.photo_4.url }}" alt="" class="img-fluid">
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Fields -->
+                    <div class="row mb-5 fields">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-sign-language"></i> Stopień trudności:
+                                    <span class="float-right">{{ recipe.get_difficulty_display }}</span>
+                                </li>
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-user-plus"></i> Porcje:
+                                    <span class="float-right">{{ recipe.serves }}</span>
+                                </li>
+
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-star"></i> Średnia ocena:
+                                    <span class="float-right">{{ recipe.rating }}</span>
+                                </li>
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-user-friends"></i> Ilość osób głosujących:
+                                    <span class="float-right">{{ recipe.number_of_ratings }}</span>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-info"></i> Dieta:
+                                    <span class="float-right">{{ recipe.get_diet_display }}</span>
+                                </li>
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-clock"></i> Czas przygotowania:
+                                    <span class="float-right">{{ recipe.preparation_time_in_minutes }}minut</span>
+                                </li>
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-user"></i> Autor przepisu:
+                                    <span class="float-right">{{ recipe.author }}</span>
+                                </li>
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-calendar-alt"></i> Data dodania:
+                                    <span class="float-right">{{ recipe.added_date | date:'d N' }}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-secondary" style="margin-right: 5px">Oceń przepis</button>
+                            <button class="btn btn-primary ">Dodaj do ulubionych</button>
+                        </div>
+                    </div>
+                    <!-- Ingredients-->
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h3 class="text-secondary">Składniki:</h3>
+                            {{ recipe.ingredients|linebreaks }}
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="row mb-5">
+                        <div class="col-md-12">
+                            <h3 class="text-secondary">Opis przygotowania:</h3>
+                            {{ recipe.description|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

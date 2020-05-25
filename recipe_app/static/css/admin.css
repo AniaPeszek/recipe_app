@@ -1,0 +1,36 @@
+#header {
+    height: 60px;
+    background: #613613;
+    color: #fff;
+    font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+    font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+#branding h1{
+    color: #fff;
+}
+
+a:link,
+a:visited {
+    color: #613613;
+}
+
+div.breadcrumbs {
+    background: #169719;
+    color: #fffee8;
+}
+
+.module h2, .module caption, .inline-group h2 {
+    background: #169719;
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button{
+    background: #169719;
+}
+
+.button.default, input[type=submit].default, .submit-row input.default{
+    background: #0c570f;
+}

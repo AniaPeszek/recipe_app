@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} | O nas{% endblock %}
+
+{% block content %}
+    <!-- Top bar -->
+    <section id="showcase-inner" class="py-5 text-white">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <h1 class="display-4">O projekcie KuKu!</h1>
+                    <p class="lead">Gotowanie już zawsze będzie proste!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section id="about" class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Chcesz coś ugotować a nie masz pomysłu?<br>Tutaj go znajdziesz!</h2>
+                    <p class="lead">Strona została stworzona w ramach nauki django,
+                        więc niestety nie znajdziesz to żadnych ciekawych przepisów...
+                        <i class="far fa-grin-beam-sweat"></i>
+                    </p>
+                    <img src="{% static 'img/about.jpg' %}" alt="">
+                    <p class="mt-4">Zapraszam za to do testowania funkcjonalności strony i do kontaktu
+                        <i class="far fa-grin"></i>
+                    </p>
+                </div>
+
+                <!-- Recipe fo the month -->
+                <div class="col-md-4">
+                    {% if recipe %}
+                    <div class="card text-center">
+                        <img class="card-img-top" src="{{ recipe.photo_main.url }}" alt="Przepis miesiąca">
+                        <div class="card-body">
+                            <h5 class="card-title">Przepis miesiąca</h5>
+                            <h6 class="text-secondary">{{ recipe.title }}</h6>
+                            <p class="card-text">Polecamy!</p>
+                            <hr>
+                            <a href="{% url 'recipe' recipe.id %}" class="btn btn-primary btn-block">Zobacz przepis</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom bar -->
+    <section id="work" class="bg-dark text-white text-center">
+        <h2 class="display-4">KuKu</h2>
+        <h4>Gotowanie już zawsze będzie proste!</h4>
+        <a href="{% url 'recipes' %}" class="btn btn-secondary text-white btn-lg">Zobacz nasze przepisy</a>
+    </section>
+
+{% endblock %}

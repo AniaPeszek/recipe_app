@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+    <!-- Showcase -->
+    <section id="showcase">
+        <div class="container text-center">
+            <div class="meal-search p-5">
+                <div class="overlay p-5">
+                    <h1 class="display-4 mb-4">
+                        Szukaj przepisów
+                    </h1>
+                    <p class="lead">Dostosuj wyszukiwanie do swoich potrzeb
+                    </p>
+                    <div class="search">
+                        <form action="{% url 'search' %}">
+                            <!-- Form Row 1 -->
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="sr-only">Keywords</label>
+                                    <input type="text" name="keywords" class="form-control"
+                                           placeholder="Na co masz ochotę?">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="sr-only">Kategoria</label>
+                                    <select name="category" class="form-control">
+                                        <option selected="true" value="">Kategoria: Wszystkie</option>
+                                        {% for key, value in category_choices.items %}
+                                            <option value="{{ key }}">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Form Row 2 -->
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="sr-only">Dieta</label>
+                                    <select name="diet" class="form-control">
+                                        <option selected="true" value="">Dieta: Wszystkie</option>
+                                        {% for key, value in diet_choices.items %}
+                                            <option value="{{ key }}">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <select name="difficulty" class="form-control" id="type">
+                                        <option selected="true" value="">Trudność: Wszystkie</option>
+                                        {% for key, value in difficulty_choices.items %}
+                                            <option value="{{ key }}">{{ value }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary btn-block mt-4" type="submit">Wyszukaj</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <br>
+    {% include 'partials/_alerts.html' %}
+
+    <!-- Recipes -->
+    <section id="listings" class="py-5">
+        <div class="container">
+            <h3 class="text-center mb-3">Najnowsze przepisy</h3>
+            <div class="row">
+
+                {% if recipes %}
+                    {% for recipe in recipes %}
+                        {% include 'partials/_recipe.html' %}
+                    {% endfor %}
+                {% else %}
+                    <div class="col-md-12">
+                        <p>Nie ma jeszcze żadnych przepisów. Bądź pierwszy!</p>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-5 bg-secondary text-white">
+        <div class="container">
+            <div class="row text-center justify-content-md-center">
+                <div class="col-md-4">
+                    <i class="fas fa-book-open fa-4x mr-4"></i>
+                    <hr>
+                    <h3>Zbieraj przepisy</h3>
+                    <p>Zaznaczaj ulubione przepisy i stwórz swoją własną bazę najlepszych przepisów</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="far fa-comments fa-4x mr-4"></i>
+                    <hr>
+                    <h3>Komentuj i sprawdzaj opinie</h3>
+                    <p>Skorzystałeś z przepisu?<br>Daj znać jak wyszło!</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+{% endblock %}
