@@ -1,0 +1,28 @@
+{% extends "star_ratings/widget_base.html" %}
+{% block rating_detail %}
+    {% block rating_average %}
+    <div class="star-ratings-rating-average">Średnia ocena: <span class='star-ratings-rating-value'>{{ rating.average|floatformat:"-2" }}</span></div>
+    {% endblock rating_average %}
+    {% block rating_count %}
+    <div class="star-ratings-rating-count">Ilość głosów: <span class='star-ratings-rating-value'>{{ rating.count }}</span></div>
+    {% endblock rating_count %}
+    {% block rating_user %}
+    <div class="star-ratings-rating-user">Twoja ocena: <span class='star-ratings-rating-value' data-when-null="Nie ma jeszcze głosów">{% if user_rating %}{{ user_rating.score }}{% else %}Nie ma jeszcze ocen{% endif %}</span></div>
+    {% if not user.is_authenticated and not anonymous_ratings and not read_only %}
+        <p>Zaloguj się żeby zagłosować</p>
+    {% endif %}
+    {% endblock rating_user %}
+    <div class="star-ratings-errors"></div>
+    {% block rating_clearable %}
+        {% if clearable %}
+            <div class="star-ratings-clear star-ratings-clear-{{user_rating|yesno:'visible,hidden'}}">
+                <form action="{% url 'ratings:rate' rating.content_type_id rating.object_id %}" class="star-ratings-rate-action" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="1" name="clear">
+                <input type="hidden" value="{{ request.path }}" name="next">
+                <button type="submit" class="star-ratings-rating-clear">Wyczyść</button>
+                </form>
+            </div>
+        {% endif %}
+    {% endblock %}
+    {% endblock rating_detail %}

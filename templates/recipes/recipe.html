@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 
 {% load humanize %}
+{% load static %}
+{% load ratings %}
 
 {% block title %} | {{ recipe.title }}{% endblock %}
+
+{% block headscripts %}
+    <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+    <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+{% endblock %}
+
 
 {% block content %}
     <section id="showcase-inner" class="py-5 text-white">
@@ -17,6 +25,9 @@
             </div>
         </div>
     </section>
+
+    <br>
+    {% include 'partials/_alerts.html' %}
 
 
     <!-- Recipe -->
@@ -87,12 +98,8 @@
                                 </li>
 
                                 <li class="list-group-item text-secondary">
-                                    <i class="fas fa-star"></i> Średnia ocena:
-                                    <span class="float-right">{{ recipe.rating }}</span>
-                                </li>
-                                <li class="list-group-item text-secondary">
-                                    <i class="fas fa-user-friends"></i> Ilość osób głosujących:
-                                    <span class="float-right">{{ recipe.number_of_ratings }}</span>
+                                    <i class="fas fa-star"></i> Ocena użytkowników:
+                                    <span class="float-right">{% ratings recipe %}</span>
                                 </li>
                             </ul>
 
@@ -116,41 +123,38 @@
                                     <i class="fas fa-calendar-alt"></i> Data dodania:
                                     <span class="float-right">{{ recipe.added_date | date:'d N' }}</span>
                                 </li>
+                                <li class="list-group-item text-secondary">
+                                    <!-- Buttons -->
+                                    <button class="btn btn-primary"
+                                            {% if is_favourite %}style="display:none;"{% endif %}
+                                            id="add-to-favourites" value="{{ recipe.id }}">Dodaj do
+                                        ulubionych
+                                    </button>
+
+                                    <button class="btn btn-primary"
+                                            {% if not is_favourite %}style="display:none;"{% endif %}
+                                            id="remove-from-favourites" value="{{ recipe.id }}">Usuń z ulubionych
+                                    </button>
+
+                                    {% if user == recipe.author %}
+                                        <a href="{% url 'edit_recipe' recipe.id %}" class="btn btn-primary">Edytuj przepis</a>
+                                    {% endif %}
+
+                                    {% csrf_token %}
+                                </li>
                             </ul>
                         </div>
                     </div>
 
 
-                    <!-- Buttons -->
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <button class="btn btn-secondary" style="margin-right: 5px">Oceń przepis</button>
-
-                            <button class="btn btn-primary" {% if is_favourite %}style="display:none;"{% endif %}
-                                    id="add-to-favourites" value="{{ recipe.id }}">Dodaj do
-                                ulubionych
-                            </button>
-
-                            <button class="btn btn-primary" {% if not is_favourite %}style="display:none;"{% endif %}
-                                    id="remove-from-favourites" value="{{ recipe.id }}">Usuń z ulubionych
-                            </button>
-
-                            {% csrf_token %}
-                        </div>
-                    </div>
-
-
-                    <!-- Ingredients-->
                     <div class="row mb-5">
-                        <div class="col-md-12">
+                        <!-- Ingredients-->
+                        <div class="col-md-3">
                             <h3 class="text-secondary">Składniki:</h3>
                             {{ recipe.ingredients|linebreaks }}
                         </div>
-                    </div>
-
-                    <!-- Description -->
-                    <div class="row mb-5">
-                        <div class="col-md-12">
+                        <!-- Description -->
+                        <div class="col-md-9">
                             <h3 class="text-secondary">Opis przygotowania:</h3>
                             {{ recipe.description|linebreaks }}
                         </div>
@@ -169,59 +173,59 @@
         $(document).ready(function () {
             $("#add-to-favourites").click(function () {
                 {% if user.is_authenticated %}
-                var recipe_id = $(this).val();
-                console.log(recipe_id)
-                var csrf_token =$('input[name="csrfmiddlewaretoken"]').val();
-                var addToFavourites = $.ajax({
-                    "url": "{% url 'add_to_favourites' %}",
-                    "type": "POST",
-                    'data': {
-                        'recipe_id': recipe_id,
-                        'csrfmiddlewaretoken': csrf_token
-                    },
-                    'dataType': 'json',
-                    success: function (response) {
-                        console.log(response);
-                        $("#add-to-favourites").hide();
-                        $("#remove-from-favourites").show();
-                    },
-                    error: function (response) {
-                        console.log(response["responseJSON"]["error"]);
-                    }
-                });
+                    var recipe_id = $(this).val();
+                    console.log(recipe_id)
+                    var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+                    var addToFavourites = $.ajax({
+                        "url": "{% url 'add_to_favourites' %}",
+                        "type": "POST",
+                        'data': {
+                            'recipe_id': recipe_id,
+                            'csrfmiddlewaretoken': csrf_token
+                        },
+                        'dataType': 'json',
+                        success: function (response) {
+                            console.log(response);
+                            $("#add-to-favourites").hide();
+                            $("#remove-from-favourites").show();
+                        },
+                        error: function (response) {
+                            console.log(response["responseJSON"]["error"]);
+                        }
+                    });
 
                 {% else %}
-                alert('Żeby dodać przepis do ulubionych musisz być zalogowany');
+                    alert('Żeby dodać przepis do ulubionych musisz być zalogowany');
                 {% endif %}
             })
         });
 
-    $(document).ready(function () {
+        $(document).ready(function () {
             $("#remove-from-favourites").click(function () {
                 {% if user.is_authenticated %}
-                var recipe_id = $(this).val();
-                console.log(recipe_id)
-                var csrf_token =$('input[name="csrfmiddlewaretoken"]').val();
-                var removeFavourites = $.ajax({
-                    "url": "{% url 'remove_from_favourites' %}",
-                    "type": "POST",
-                    'data': {
-                        'recipe_id': recipe_id,
-                        'csrfmiddlewaretoken': csrf_token
-                    },
-                    'dataType': 'json',
-                    success: function (response) {
-                        console.log(response);
-                        $("#remove-from-favourites").hide();
-                        $("#add-to-favourites").show();
-                    },
-                    error: function (response) {
-                        console.log(response["responseJSON"]["error"]);
-                    }
-                });
+                    var recipe_id = $(this).val();
+                    console.log(recipe_id)
+                    var csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+                    var removeFavourites = $.ajax({
+                        "url": "{% url 'remove_from_favourites' %}",
+                        "type": "POST",
+                        'data': {
+                            'recipe_id': recipe_id,
+                            'csrfmiddlewaretoken': csrf_token
+                        },
+                        'dataType': 'json',
+                        success: function (response) {
+                            console.log(response);
+                            $("#remove-from-favourites").hide();
+                            $("#add-to-favourites").show();
+                        },
+                        error: function (response) {
+                            console.log(response["responseJSON"]["error"]);
+                        }
+                    });
 
                 {% else %}
-                alert('Żeby usunąć przepis z ulubionych musisz być zalogowany');
+                    alert('Żeby usunąć przepis z ulubionych musisz być zalogowany');
                 {% endif %}
             })
         })

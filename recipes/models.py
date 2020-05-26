@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django_utils.choices import Choice, Choices
+from django.contrib.contenttypes.fields import GenericRelation
+from star_ratings.models import Rating
 
 
 class Recipe(models.Model):
@@ -36,9 +38,7 @@ class Recipe(models.Model):
         meat = Choice(3, 'Mięsna')
 
     diet = models.PositiveIntegerField(choices=DietChoices, default=DietChoices.meat)
-
-    rating = models.DecimalField(max_digits=3, decimal_places=1)
-    number_of_ratings = models.IntegerField(default=0)
+    ratings = GenericRelation(Rating, related_query_name='recipes_rating')
     is_published = models.BooleanField(default=True)
     is_recipe_of_month = models.BooleanField(default=False)
     added_date = models.DateTimeField(default=timezone.now)

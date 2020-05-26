@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+{% load static %}
+{% load ratings %}
+
+{% block title %} | Stwórz przepis{% endblock %}
+
+
+{% block content %}
+    <section id="showcase-inner" class="py-5 text-white">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <h1 class="display-4">Stwórz swój własny przepis</h1>
+                    <p class="lead">
+                        I podziel się nim z innymi <i class="fas fa-utensils text-secondary"></i></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <br>
+    {% include 'partials/_alerts.html' %}
+
+
+    <section id="register" class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 mx-auto">
+                    <div class="card">
+                        <div class="card-header bg-primary text-center" id="showcase-form">
+                            <div class="container">
+                                <div class="row text-center">
+                                    <div class="col-md-12">
+                                        <h4 class="text-white">Twój przepis</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+
+                            {% include 'partials/_alerts.html' %}
+                            <form action="{% url 'create_recipe' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                {% for field in form %}
+                                    <div class="form-group">
+                                        {{ field.label_tag }} {{ field }}
+                                        {% if field.help_text %}
+                                            <p class="help">{{ field.help_text|safe }}</p>
+                                        {% endif %}
+                                        {{ field.errors }}
+                                    </div>
+
+                                {% endfor %}
+
+                            <button class="btn btn-secondary btn-block mt-4" type="submit">Opublikuj</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-5 bg-secondary text-white">
+        <div class="container">
+            <div class="row text-center justify-content-md-center">
+                <div class="col-md-4">
+                    <i class="fas fa-book-open fa-4x mr-4"></i>
+                    <hr>
+                    <h3>Zbieraj przepisy</h3>
+                    <p>Zaznaczaj ulubione przepisy i stwórz swoją własną bazę najlepszych przepisów</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="far fa-star fa-4x mr-4"></i>
+                    <hr>
+                    <h3>Oceniaj przepisy</h3>
+                    <p>Skorzystałeś z przepisu?<br>Daj znać czy było smacznie!</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+
+{% endblock %}
+

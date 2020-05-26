@@ -1,17 +1,14 @@
 {% extends 'base.html' %}
 
-{% load humanize %}
-
-{% block title %} | Przepisy{% endblock %}
+{% block title %} | Ulubione{% endblock %}
 
 {% block content %}
-
     <section id="showcase-inner" class="py-5 text-white">
         <div class="container">
             <div class="row text-center">
                 <div class="col-md-12">
-                    <h1 class="display-4">Nasze przepisy</h1>
-                    <p class="lead">Smacznego!</p>
+                    <h1 class="display-4">Twoje przepisy</h1>
+                    <p class="lead">Zarządzaj swoimi przepisami.</p>
                 </div>
             </div>
         </div>
@@ -31,7 +28,7 @@
                     {% endfor %}
                 {% else %}
                     <div class="col-md-12">
-                        <p>Nie ma jeszcze żadnych przepisów. Bądź pierwszy!</p>
+                        <h2>Nie masz jeszcze własnych przepisów. Możesz dodać przepis <a href="{% url 'create_recipe' %}">tutaj.</a> </h2>
                     </div>
                 {% endif %}
 

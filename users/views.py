@@ -74,3 +74,20 @@ def dashboard(request):
     context = {'recipes': page_recipes}
 
     return render(request, 'users/dashboard.html', context)
+
+
+@login_required()
+def user_recipes(request):
+    recipes = Recipe.objects.filter(author=request.user).order_by('-added_date').all()
+    paginator = Paginator(recipes, 6)
+    page = request.GET.get('page')
+    try:
+        page_recipes = paginator.page(page)
+    except PageNotAnInteger:
+        page_recipes = paginator.page(1)
+    except EmptyPage:
+        page_recipes = paginator.page(paginator.num_pages)
+
+    context = {'recipes': page_recipes}
+
+    return render(request, 'users/user_recipes.html', context)

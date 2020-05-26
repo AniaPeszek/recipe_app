@@ -20,6 +20,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicons/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicons/favicon-16x16.png' %}">
     <link rel="manifest" href="{% static 'img/favicons/site.webmanifest' %}">
+    {% block headscripts %}{% endblock %}
 
     <title>Kuku!{% block title %}{% endblock %}</title>
 </head>

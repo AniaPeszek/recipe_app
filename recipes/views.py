@@ -1,11 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from django.contrib import messages
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 
 from .models import Recipe
 from django.contrib.auth.models import User
+
+from .forms import RecipeForm
 
 
 def index(request):
@@ -59,6 +62,46 @@ def remove_from_favourites(request):
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
+
+
+def create_recipe(request):
+    if request.user.is_anonymous:
+        messages.info(request, 'Żeby dodwać przepisy musisz być zalogowany')
+        return redirect('index')
+    else:
+        if request.method == 'POST':
+            author = request.user
+            new_recipe = Recipe(author=request.user)
+            form = RecipeForm(request.POST, request.FILES, instance=new_recipe)
+
+            if form.is_valid():
+                new_recipe.save()
+                return redirect('recipes')
+        else:
+            form = RecipeForm()
+
+        context = {'form': form}
+        return render(request, 'recipes/create_recipe.html', context)
+
+
+@login_required
+def edit_recipe(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    if request.user != recipe.author:
+        messages.info(request, 'Tylko autor przepisu może go modyfikować')
+        return redirect('recipes')
+    else:
+        if request.method == 'POST':
+            form = RecipeForm(request.POST, request.FILES, instance=recipe)
+            if form.is_valid():
+                recipe.save()
+                return redirect('recipe', recipe_id=recipe_id)
+        else:
+            form = RecipeForm(instance=recipe)
+
+        context = {'form': form,
+                   'recipe_id': recipe_id}
+        return render(request, 'recipes/edit_recipe.html', context)
 
 
 def search(request):

@@ -23,4 +23,5 @@ urlpatterns = [
     path('recipes/', include('recipes.urls')),
     path('users/', include('users.urls')),
     path('admin/', admin.site.urls),
+    path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
