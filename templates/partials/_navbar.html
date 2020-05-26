@@ -12,12 +12,16 @@
                 <li class="nav-item mr-3 {% if '/' == request.path %}active{% endif %}">
                     <a class="nav-link" href="{% url 'index' %}">Start</a>
                 </li>
+
                 <li class="nav-item mr-3 {% if 'about' in request.path %}active{% endif %}">
                     <a class="nav-link" href="{% url 'about' %}">o KuKu</a>
                 </li>
-                <li class="nav-item mr-3 {% if 'recipes' in request.path %}active{% endif %}">
+            {% with request.resolver_match.url_name as url_name %}
+                <li class="nav-item mr-3 {% if url_name == 'recipes'%}active{% endif %}">
                     <a class="nav-link" href="{% url 'recipes' %}">Przepisy</a>
                 </li>
+            {% endwith %}
+
             </ul>
 
             <ul class="navbar-nav ml-auto">

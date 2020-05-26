@@ -30,3 +30,13 @@ Collect static files\
 
 Run your dev server\
 `$ python manage.py runserver`
+
+##Screenshots
+Home page
+![image](screens/homepage.jpg?raw=true "Homepage")
+
+Favourite recipes
+![image](screens/favourites.jpg?raw=true "Homepage")
+
+Create recipe
+![image](screens/create_recipe.jpg?raw=true "Homepage")
