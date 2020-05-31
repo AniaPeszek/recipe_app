@@ -142,3 +142,8 @@ LOGIN_URL = 'login'
 # rating
 STAR_RATINGS_STAR_HEIGHT = 25
 STAR_RATINGS_STAR_WIDTH = 25
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
