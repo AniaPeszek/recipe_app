@@ -35,7 +35,7 @@ class Recipe(models.Model):
     class DietChoices(Choices):
         vegan = Choice(1, 'Wegańska')
         vegetarian = Choice(2, 'Wegetariańska')
-        meat = Choice(3, 'Mięsna')
+        meat = Choice(3, 'Bez ograniczeń')
 
     diet = models.PositiveIntegerField(choices=DietChoices, default=DietChoices.meat)
     ratings = GenericRelation(Rating, related_query_name='recipes_rating')
