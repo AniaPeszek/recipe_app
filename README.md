@@ -31,7 +31,8 @@ Collect static files\
 Run your dev server\
 `$ python manage.py runserver`
 
-##Screenshots
+
+## Screenshots
 
 Home page
 ![image](screens/homepage.jpg?raw=true "Homepage")

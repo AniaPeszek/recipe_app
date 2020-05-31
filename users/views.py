@@ -8,8 +8,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def register(request):
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
+        # first_name = request.POST.get('first_name')
+        # last_name = request.POST.get('last_name')
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -24,8 +24,7 @@ def register(request):
                     messages.error(request, 'Ten email jest już zajęty.')
                     return redirect('register')
                 else:
-                    user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username,
-                                                    email=email, password=password)
+                    user = User.objects.create_user(username=username, email=email, password=password)
                     user.save()
                     messages.success(request, 'Zostałeś zarejestrowany w Kuku! Możesz się zalogować.')
                     return redirect('login')
