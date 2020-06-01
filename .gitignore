@@ -8,3 +8,7 @@ db.sqlite3
 venv
 /static
 .idea/
+.coverage
+/htmlcov/
+.coveragerc
+.pytest_cache/
